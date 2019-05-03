@@ -31,16 +31,22 @@ def get_extension_info(master_info_dict):
 def _get_readme(user, repo):
     exts = [ '.md', '.markdown', '.rst', '' ]
     for ext in exts:
-        url = 'https://raw.githubusercontent.com/%s/%s/master/' % (user, repo)
-        url += 'README' + ext
+        urlbase = 'https://raw.githubusercontent.com/%s/%s/master/' % (user, repo)
+        url = urlbase + 'README' + ext
         urlfo = urllib.urlopen(url)
+        if urlfo.getcode() == 404:
+            # try lowercase readme
+            url = urlbase + 'readme' + ext
+            urlfo = urllib.urlopen(url)
         if urlfo.getcode() != 404:
             readme = urlfo.read()
             # {% is reserved for liquid templates
             readme = readme.replace('{% ', '{%raw%}{% {%endraw%}')
             readme = readme.replace(' %}', '{%raw%} %}{%endraw%}')
             if ext == '.rst':
-                readme = pypandoc.convert(readme, to='markdown_github', format='rst')
+                readme = pypandoc.convert(readme, to='markdown_github', format = 'rst' )
+            else:
+                readme = pypandoc.convert(readme, to='markdown_github', format = 'markdown_github' ) 
             return readme
 
 def write_extension(extension):

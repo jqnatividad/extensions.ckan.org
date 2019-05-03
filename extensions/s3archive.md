@@ -1,6 +1,6 @@
 ---
 layout: extension
-name: ckanext-s3archive
+name: s3archive
 title: Archive CKAN datastore to S3
 author: CKAN
 homepage: https://github.com/ckan/ckanext-s3archive
@@ -8,7 +8,7 @@ github_user: ckan
 github_repo: ckanext-s3archive
 category: Extension
 featured: 
-permalink: /extension/ckanext-s3archive/
+permalink: /extension/s3archive/
 ---
 
 
@@ -47,7 +47,7 @@ Usage
 
 The following paster command will archive all the files to S3
 
-paster --plugin=ckanext-s3archive s3archive archive -c \<path to config file\>
+paster --plugin=ckanext-s3archive s3archive archive -c &lt;path to config file&gt;
 
 This command can be put in a cron job and is safe to be run regularly but is recommended that it is run about once a day. This is to give plenty time for the last job to finish before rerunning. If doing a large migration then it is probably best to run the command outside the cron for the first run.
 

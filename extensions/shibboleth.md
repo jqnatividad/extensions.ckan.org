@@ -1,77 +1,75 @@
 ---
 layout: extension
-name: ckanext-shibboleth
-title: CKAN shibboleth identification plugin
-author: Kata team repository
-homepage: https://github.com/kata-csc/ckanext-shibboleth
-github_user: kata-csc
+name: shibboleth
+title: Shibboleth authentication plugin for CKAN
+author: Harri Palojärvi
+homepage: https://github.com/harripal/ckanext-shibboleth
+github_user: harripal
 github_repo: ckanext-shibboleth
 category: Extension
 featured: 
-permalink: /extension/ckanext-shibboleth/
+permalink: /extension/shibboleth/
 ---
 
 
-Shibboleth identification plugin for CKAN 2.1. Uses repoze.who.openid plugin for authentication.
+ckanext-shibboleth
+==================
+
+Shibboleth identification plugin for CKAN. Uses repoze.who.openid plugin for authentication.
 
 Install
 -------
 
-You can install ckanext-shibboleth with
+    pip install -e git+git://github.com/harripal/ckanext-shibboleth.git#egg=ckanext-shibboleth
 
-	pip install -e git+git://github.com/kata-csc/ckanext-shibboleth.git#egg=ckanext-shibboleth
-	
 Nosetests
 ---------
 
-To run tests type
+    $ python setup.py nosetests
 
-	$ python setup.py nosetests
-	
 Plugin configuration
 --------------------
 
-who.ini configuration:
+pyenv/src/ckan/development.ini:
 
-	[plugin:shibboleth]
+    ...
+    ckan.plugins = shibboleth
+    ...
+
+pyenv/src/ckan/who.ini:
+
+    [plugin:shibboleth]
     use = ckanext.repoze.who.shibboleth.plugin:make_identification_plugin
     session = Shib-Session-ID
-    eppn = eppn
     mail = mail
-    fullname = cn
-    # Add more key-worded parameters below
-    firstname = displayName
-    surname = sn
-    organization = schacHomeOrganization
-    mobile = mobile
-    telephone = telephoneNumber
+    name = cn
 
-	[general]
-	request_classifier = repoze.who.classifiers:default_request_classifier
-	challenge_decider = repoze.who.plugins.openid.classifiers:openid_challenge_decider
+    [general]
+    request_classifier = repoze.who.classifiers:default_request_classifier
+    challenge_decider = repoze.who.plugins.openid.classifiers:openid_challenge_decider
 
-	[identifiers]
-	plugins =
-		shibboleth
-		friendlyform;browser
-		openid
-		auth_tkt
+    [identifiers]
+    plugins =
+        shibboleth
+        friendlyform;browser
+        openid
+        auth_tkt
 
-	[authenticators]
-	plugins = 
-		ckan.lib.authenticator:OpenIDAuthenticator
-		ckan.lib.authenticator:UsernamePasswordAuthenticator
+    [authenticators]
+    plugins = 
+        ckan.lib.authenticator:OpenIDAuthenticator
+        ckan.lib.authenticator:UsernamePasswordAuthenticator
 
-	[challengers]
-	plugins =
-		shibboleth
+    [challengers]
+    plugins =
+        openid
+        friendlyform;browser
 
-Shibboleth service provider (sp)
+shibboleth sp
 -------------
 
-If you can login to IdP but CKAN is not logging you in, try removing REMOTE_USER from 
-ApplicationDefaults in /etc/shibboleth/shibboleth2.xml. This should work:
+If you can login to IdP but CKAN is not logging you in, try removing REMOTE\_USER from
+ApplicationDefaults in /etc/shibboleth/shibboleth2.xml, this should work:
 
-	<ApplicationDefaults entityID="https://sp.mydomain.com/shibboleth">
-
+    <ApplicationDefaults entityID="https://sp.mydomain.com/shibboleth">
 

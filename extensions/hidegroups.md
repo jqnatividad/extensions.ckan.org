@@ -1,6 +1,6 @@
 ---
 layout: extension
-name: ckanext-hidegroups
+name: hidegroups
 title: A CKAN 2 extension that removes CKAN's groups feature from the web interface
 author: Open Knowledge
 homepage: https://github.com/okfn/ckanext-hidegroups
@@ -8,7 +8,7 @@ github_user: okfn
 github_repo: ckanext-hidegroups
 category: Extension
 featured: 
-permalink: /extension/ckanext-hidegroups/
+permalink: /extension/hidegroups/
 ---
 
 
@@ -27,5 +27,5 @@ To install, activate your CKAN virtualenv then run:
 Then add the plugin to your CKAN config file (e.g. `development.ini` or
 `production.ini`), for example:
 
-  ckan.plugins = stats text_preview recline_preview hidegroups
+ckan.plugins = stats text\_preview recline\_preview hidegroups
 

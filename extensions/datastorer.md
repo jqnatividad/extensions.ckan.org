@@ -1,14 +1,14 @@
 ---
 layout: extension
-name: ckanext-datastorer
-title: Get files from ckan into the webstore.
+name: datastorer
+title: Get files from ckan into the webstore
 author: CKAN
 homepage: https://github.com/ckan/ckanext-datastorer
 github_user: ckan
 github_repo: ckanext-datastorer
 category: Extension
 featured: 
-permalink: /extension/ckanext-datastorer/
+permalink: /extension/datastorer/
 ---
 
 
@@ -75,7 +75,7 @@ A paster command is available, that lets you archive all resources or just those
 
 To queue the update to run in celery, use:
 
-> paster datastorer queue [package-id]
+> paster datastorer queue \[package-id\]
 
 Logging and Debugging
 =====================

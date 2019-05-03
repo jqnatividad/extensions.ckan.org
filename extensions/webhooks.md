@@ -1,35 +1,48 @@
 ---
 layout: extension
-name: ckanext-webhooks
-title: Webhooks for CKAN.  Allows users and services to register to be notified for common CKAN events e.g. new/update/delete events for datasets and resources
+name: webhooks
+title: Webhooks for CKAN
 author: Denis Zgonjanin
 homepage: https://github.com/deniszgonjanin/ckanext-webhooks
 github_user: deniszgonjanin
 github_repo: ckanext-webhooks
 category: Extension
 featured: 
-permalink: /extension/ckanext-webhooks/
+permalink: /extension/webhooks/
 ---
 
 
 ckanext-webhooks
 ================
 
-Webhooks for your CKAN. Allows users and services to register to be notified for common CKAN events, such as:
+Webhooks for your CKAN. For example, as an app developer you want to be notified when a dataset your app depends on is updated. This extension allows users and services to register to be notified for common CKAN events, such as:
 
 -   Dataset Events - new, update, delete
 -   Resource Events - new, update, delete
 
 Subscribers provide a callback url when registering for an event, and CKAN will call that url when the desired event happens.
 
-Usage
------
+Installation
+------------
 
 Add webhooks to your CKAN plugins:
 
 ``` sourceCode
 ckan.plugins = ... webhooks
 ```
+
+The extension pushes webhook notifications onto the CKAN celery queue, so that the web app won't block executions while the webhooks are firing. For this reason you need to make sure the celery daemon is running:
+
+``` sourceCode
+paster --plugin=ckan celeryd -c development.ini
+```
+
+Or if you are using datacats:
+
+Usage
+-----
+
+At the moment there is no web interface to create Webhooks. Please make one if you're up for it! For now, hooks must be registered through the action API. For example:
 
 ``` sourceCode
 import ckanapi
@@ -55,19 +68,22 @@ Supported Topics
 -   resource/update
 -   resource/delete
 
-Design Decisions
-----------------
+Authentication
+--------------
 
-The extension allows users to create webhooks without logging in. This decreases friction to creating webhooks and exposes the functionality to more users. The main reason for the decision to do it this way is because most governments (the primary users of CKAN) do not wish to allow account creation in CKAN to the public. If we only allow Webhook creation for users with an API key, many CKAN users will be left without a way to create Webhooks.
+There is a minimal authentication as you may restrict creation of webhooks to users who are editors or administrators of organisations. You may add a config option to your CKAN file as below where the value is one of editor, admin, sysadmin or none, specifying the minimum roles required to be able to interact with webhooks.
 
-Because of this, the extension makes the following decisions:
+> \# Only let sysadmins create hooks ckanext.webhooks.minimum\_auth = sysadmin
+>
+> \# Only let admins and editors create hooks ckanext.webhooks.minimum\_auth = editor
 
--   There is no way to list all existing webhooks. This would allow everyone to see everybody else's webhooks.
+Some other notes:
+
 -   Each webhook gets a random id that is sufficiently long to be impractical to guess.
--   Consequently, a user needs to keep track of their webhook ids in order to delete a webhook. The id is returned on webhook creation, and it is also passed in the webhook execution call, so if the user loses it, they can fetch it next time the webhook is executed.
--   This might create the problem of stale webhooks, but that is ok. If a webhook executes and the URL returns a 4xx error several times, the extension will eventually delete the webhook.
+-   A user needs to keep track of their webhook ids in order to delete a webhook. The id is returned on webhook creation, and it is also passed in the webhook execution call, so if the user loses it, they can fetch it next time the webhook is executed.
 
-TODO/Wishlist ====
+TODO/Wishlist
+-------------
 
 -   Access control: Make sure access-restricted events do not leak
 -   API authentication for private events.

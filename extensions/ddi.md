@@ -1,6 +1,6 @@
 ---
 layout: extension
-name: ckanext-ddi
+name: ddi
 title: DDI harvester for ckanext-kata
 author: Kata team repository
 homepage: https://github.com/kata-csc/ckanext-ddi
@@ -8,7 +8,7 @@ github_user: kata-csc
 github_repo: ckanext-ddi
 category: Extension
 featured: 
-permalink: /extension/ckanext-ddi/
+permalink: /extension/ddi/
 ---
 
 
@@ -20,11 +20,12 @@ Harvester configuration
 Please make sure you have ckanext-harvest installed. You can add a harvest source from CKAN UI and add the URL in which the XML files for DDI2 reside.
 
 Configuration options:
- *  limit: Import only first 'limit' number of XML files.
+
+-   limit: Import only first 'limit' number of XML files.
 
 Here is an example of a configuration object (the one that must be entered in
 the configuration field):
-    {
-     "limit": 10,
-    }
+{
+"limit": 10,
+}
 
